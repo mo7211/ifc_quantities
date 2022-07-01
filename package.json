@@ -21,5 +21,8 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",
     "rollup": "^2.75.7"
+  },
+  "dependencies": {
+    "web-ifc-viewer": "^1.0.206"
   }
 }
