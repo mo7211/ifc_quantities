@@ -46,12 +46,16 @@ function createBranchRow(table, text, depth, children) {
     row.setAttribute('data-depth', depth);
 
     const dataName = document.createElement('td');
-    const name = document.createElement('span');
-    name.classList.add('toggle');
-    name.classList.add('collapse');
-    name.textContent = text;
 
-    dataName.appendChild(name);
+
+    const toggle = document.createElement('span');
+    toggle.classList.add('toggle');
+    toggle.classList.add('collapse');
+    toggle.textContent = ' ';
+    dataName.appendChild(toggle);
+    dataName.textContent = text;
+
+
     row.appendChild(dataName);
 	table.appendChild(row); 
 

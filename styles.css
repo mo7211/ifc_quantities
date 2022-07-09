@@ -47,6 +47,26 @@ table td {
   padding-left: 30px;
 }
 
+.level3 td:first-child {
+  padding-left: 45px;
+}
+
+.level4 td:first-child {
+  padding-left: 60px;
+}
+
+.level5 td:first-child {
+  padding-left: 75px;
+}
+
+.level6 td:first-child {
+  padding-left: 90px;
+}
+
+.level7 td:first-child {
+  padding-left: 105px;
+}
+
 .collapse .toggle {
 	width: 0;
 	height: 0;
