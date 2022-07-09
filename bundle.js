@@ -121443,48 +121443,68 @@ async function init() {
 	const model = await viewer.IFC.loadIfcUrl('./IFC/01.ifc');
 	const ifcProject = await viewer.IFC.getSpatialStructure(model.modelID);
 	console.log(ifcProject);
-	const listRoot = document.getElementById('myUL');
-	createNode(listRoot, ifcProject.type, ifcProject.children);
-	generateTreeLogic();
+	const listRoot = document.getElementById('boq');
+    listRoot.setAttribute('data-depth','0');
+	createNode(listRoot, listRoot, ifcProject.type, ifcProject.children);
+	// generateTreeLogic();
 }
 
 
-function createNode(parent, text, children) {
+
+function createNode(table, parent, text, children) {
 	if(children.length === 0) {
-		createLeafNode(parent, text);
+		createLeafRow(table, parent, text);
 	} else {
 		// If there are multiple categories, group them together
 		const grouped = groupCategories(children);
-		createBranchNode(parent, text, grouped);
+		createBranchRow(table, parent, text, grouped);
 	}
 }
 
-function createBranchNode(parent, text, children) {
+function createBranchRow(table, parent, text, children) {
 
-	// container
-	const nodeContainer = document.createElement('li');
-	parent.appendChild(nodeContainer);
+    const branch = document.createElement('tr');
+    const depth = parent.getAttribute('data-depth');
+    const className = 'collapse_level' + depth;
+    branch.classList.add(className);
+    branch.setAttribute('data-depth', depth);
 
-	// title
-	const title = document.createElement('span');
-	title.textContent = text;
-	title.classList.add('caret');
-	nodeContainer.appendChild(title);
+    const dataName = document.createElement('td');
+    const name = document.createElement('span');
+    name.classList.add('toggle');
+    name.textContent = text;
 
-	// children
-	const childrenContainer = document.createElement('ul');
-	childrenContainer.classList.add('nested');
-	nodeContainer.appendChild(childrenContainer);
+    dataName.appendChild(name);
+    branch.appendChild(dataName);
+	table.appendChild(branch);
+	const childrenContainer = document.createElement('tr');
+	// childrenContainer.classList.add('nested');
+	table.appendChild(childrenContainer);
 
-	children.forEach(child => createNode(childrenContainer, child.type, child.children ));
+	children.forEach(child => createNode(table, childrenContainer, child.type, child.children ));
 
 }
 
-function createLeafNode(parent, text) {
-	const leaf = document.createElement('li');
-	leaf.classList.add('leaf-node');
-	leaf.textContent = text;
-	parent.appendChild(leaf);
+/* <tr data-depth="0" class="collapse_level0">
+<td><span class="toggle collapse"></span>Item 1</td>
+<td>123</td>
+</tr> */
+
+function createLeafRow(table, parent, text) {
+	const leaf = document.createElement('tr');
+    const depth = parent.getAttribute('data-depth');
+    const className = 'collapse_level' + depth;
+    leaf.classList.add(className);
+    leaf.setAttribute('data-depth', depth);
+
+    const dataName = document.createElement('td');
+    // const name = document.createElement('span');
+    // name.classList.add('toggle');
+    dataName.textContent = text;
+
+    // dataName.appendChild(name);
+    leaf.appendChild(dataName);
+	table.appendChild(leaf);
 }
 
 function groupCategories(children) {
@@ -121503,20 +121523,20 @@ function groupCategories(children) {
 	return children;
 }
 
-function generateTreeLogic() {
-	const toggler = document.getElementsByClassName("caret");
-	for (let i = 0; i < toggler.length; i++) {
-		toggler[i].addEventListener("click", function() {
-			this.parentElement.querySelector(".nested").classList.toggle("active");
-			this.classList.toggle("caret-down");
-		});
-	}
-}
+// function generateTreeLogic() {
+// 	const toggler = document.getElementsByClassName("caret");
+// 	for (let i = 0; i < toggler.length; i++) {
+// 		toggler[i].addEventListener("click", function() {
+// 			this.parentElement.querySelector(".nested").classList.toggle("active");
+// 			this.classList.toggle("caret-down");
+// 		});
+// 	}
+// }
 
 
 
 //Collapsable table logic
-[].forEach.call(document.querySelectorAll('#mytable .toggle'), function(el) {
+[].forEach.call(document.querySelectorAll('#boq .toggle'), function(el) {
     el.addEventListener('click', function() {
       var el = this;
       var tr = el.closest('tr');
@@ -121550,7 +121570,7 @@ function generateTreeLogic() {
   
   var findChildren = function(tr) {
     var depth = tr.dataset.depth;
-    var elements = [...document.querySelectorAll('#mytable tr')].filter(function(element) {
+    var elements = [...document.querySelectorAll('#boq tr')].filter(function(element) {
       return element.dataset.depth <= depth;
     });
     var next = nextUntil(tr, elements);
