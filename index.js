@@ -51,10 +51,11 @@ function createBranchRow(table, text, depth, children) {
     const toggle = document.createElement('span');
     toggle.classList.add('toggle');
     toggle.classList.add('collapse');
-    toggle.textContent = ' ';
-    dataName.appendChild(toggle);
-    dataName.textContent = text;
 
+    
+
+    dataName.textContent = text;
+    dataName.insertBefore(toggle, dataName.firstChild);
 
     row.appendChild(dataName);
 	table.appendChild(row); 
