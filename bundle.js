@@ -121447,6 +121447,7 @@ async function init() {
 	// createNode(listRoot, listRoot, ifcProject.type, ifcProject.children);
     populateIfcTable(listRoot, ifcProject);
 	// generateTreeLogic();
+    implementTreeLogic();
 }
 
 function populateIfcTable(table, ifcProject) {
@@ -121490,21 +121491,6 @@ function createBranchRow(table, text, depth, children) {
     row.appendChild(dataName);
 	table.appendChild(row); 
 
-	// container
-	// const nodeContainer = document.createElement('tr');
-	// table.appendChild(nodeContainer);
-
-	// // title
-	// const title = document.createElement('td');
-	// title.textContent = text;
-	// title.classList.add('caret');
-	// nodeContainer.appendChild(title);
-
-	// children
-	// const childrenContainer = document.createElement('tr');
-	// // childrenContainer.classList.add('nested');
-	// table.appendChild(childrenContainer);
-
     depth = depth+1;
 
 	children.forEach(child => createNode(table, child.type, depth, child.children ));
@@ -121514,17 +121500,19 @@ function createBranchRow(table, text, depth, children) {
 
 
 function createLeafRow(table, text, depth) {
-	const leaf = document.createElement('tr');
+	const row = document.createElement('tr');
     const className = 'level'+ depth;
-    leaf.classList.add(className);
-    leaf.classList.add('collapse');
-    leaf.setAttribute('data-depth', depth);
+    row.classList.add(className);
+    row.classList.add('collapse');
+    row.setAttribute('data-depth', depth);
 
     const dataName = document.createElement('td');
     dataName.textContent = text;
-
-    leaf.appendChild(dataName);
-	table.appendChild(leaf);
+    const price = document.createElement('td');
+    price.textContent = text;
+    row.appendChild(dataName);
+    row.appendChild(price);
+	table.appendChild(row);
 }
 
 function groupCategories(children) {
@@ -121543,19 +121531,8 @@ function groupCategories(children) {
 	return children;
 }
 
-// function generateTreeLogic() {
-// 	const toggler = document.getElementsByClassName("caret");
-// 	for (let i = 0; i < toggler.length; i++) {
-// 		toggler[i].addEventListener("click", function() {
-// 			this.parentElement.querySelector(".nested").classList.toggle("active");
-// 			this.classList.toggle("caret-down");
-// 		});
-// 	}
-// }
-
-
-
 //Collapsable table logic
+function implementTreeLogic() {
 [].forEach.call(document.querySelectorAll('#boq .toggle'), function(el) {
     el.addEventListener('click', function() {
       var el = this;
@@ -121586,7 +121563,7 @@ function groupCategories(children) {
         });
       }
     });
-  });
+  });}
   
   var findChildren = function(tr) {
     var depth = tr.dataset.depth;
