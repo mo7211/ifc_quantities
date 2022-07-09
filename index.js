@@ -12,41 +12,48 @@ init();
 async function init() {
 	const model = await viewer.IFC.loadIfcUrl('./IFC/01.ifc');
 	const ifcProject = await viewer.IFC.getSpatialStructure(model.modelID);
-	console.log(ifcProject);
 	const listRoot = document.getElementById('boq');
-    listRoot.setAttribute('data-depth','0')
-	createNode(listRoot, listRoot, ifcProject.type, ifcProject.children);
+    // listRoot.setAttribute('data-depth',0)
+	// createNode(listRoot, listRoot, ifcProject.type, ifcProject.children);
+    populateIfcTable(listRoot, ifcProject)
 	// generateTreeLogic();
 }
 
+function populateIfcTable(table, ifcProject) {
+    const initialDepth = 0;
+
+    createNode(table, ifcProject.type, initialDepth, ifcProject.children);
+}
 
 
-function createNode(table, parent, text, children) {
+function createNode(table, text, depth, children) {
+
 	if(children.length === 0) {
-		createLeafRow(table, parent, text);
+		createLeafRow(table, text, depth);
 	} else {
 		// If there are multiple categories, group them together
 		const grouped = groupCategories(children);
-		createBranchRow(table, parent, text, grouped);
+		createBranchRow(table, text, depth, grouped);
 	}
 }
 
-function createBranchRow(table, parent, text, children) {
+function createBranchRow(table, text, depth, children) {
 
-    const branch = document.createElement('tr');
-    const depth = parent.getAttribute('data-depth');
-    const className = 'collapse_level' + depth;
-    branch.classList.add(className);
-    branch.setAttribute('data-depth', depth);
+    const row = document.createElement('tr');
+    const className = 'level' + depth;
+    row.classList.add(className);
+    row.classList.add('collapse');
+    row.setAttribute('data-depth', depth);
 
     const dataName = document.createElement('td');
     const name = document.createElement('span');
     name.classList.add('toggle');
+    name.classList.add('collapse');
     name.textContent = text;
 
     dataName.appendChild(name);
-    branch.appendChild(dataName);
-	table.appendChild(branch);
+    row.appendChild(dataName);
+	table.appendChild(row); 
 
 	// container
 	// const nodeContainer = document.createElement('tr');
@@ -58,33 +65,29 @@ function createBranchRow(table, parent, text, children) {
 	// title.classList.add('caret');
 	// nodeContainer.appendChild(title);
 
-	children
-	const childrenContainer = document.createElement('tr');
-	// childrenContainer.classList.add('nested');
-	table.appendChild(childrenContainer);
+	// children
+	// const childrenContainer = document.createElement('tr');
+	// // childrenContainer.classList.add('nested');
+	// table.appendChild(childrenContainer);
 
-	children.forEach(child => createNode(table, childrenContainer, child.type, child.children ));
+    depth = depth+1;
+
+	children.forEach(child => createNode(table, child.type, depth, child.children ));
 
 }
 
-/* <tr data-depth="0" class="collapse_level0">
-<td><span class="toggle collapse"></span>Item 1</td>
-<td>123</td>
-</tr> */
 
-function createLeafRow(table, parent, text) {
+
+function createLeafRow(table, text, depth) {
 	const leaf = document.createElement('tr');
-    const depth = parent.getAttribute('data-depth');
-    const className = 'collapse_level' + depth;
+    const className = 'level'+ depth;
     leaf.classList.add(className);
+    leaf.classList.add('collapse');
     leaf.setAttribute('data-depth', depth);
 
     const dataName = document.createElement('td');
-    // const name = document.createElement('span');
-    // name.classList.add('toggle');
     dataName.textContent = text;
 
-    // dataName.appendChild(name);
     leaf.appendChild(dataName);
 	table.appendChild(leaf);
 }
