@@ -121442,6 +121442,8 @@ loadIfc('./IFC/01.ifc');
 window.ondblclick = () => viewer.IFC.selector.pickIfcItem();
 window.onmousemove = () => viewer.IFC.selector.prePickIfcItem();
 
+
+
 // window.ondblclick = async () => {
 //   const result = await viewer.IFC.selector.highlightIfcItem();
 //   if (!result) return;
@@ -121460,16 +121462,42 @@ async function loadIfc(url) {
   createTreeTable(ifcProject);
 }
 
-
-
-
 function createTreeTable(ifcProject) {
 	
 	const tableRoot = document.getElementById('boq');
   removeAllChildren(tableRoot);
   populateIfcTable(tableRoot, ifcProject);
   implementTreeLogic();
+
+  // const buttonCollapse = document.getElementById('collapseButton')
+  // buttonCollapse.addEventListener('click', collapseTable)
+  // const buttonExpand = document.getElementById('expandButton')
+  // buttonExpand.addEventListener('click', expandTable);
+
 }
+
+//Not working functions: 
+
+// function collapseTable() {
+//   const elements = document.getElementsByClassName('collapse');
+//   console.log(elements);  
+//   console.log(elements);  
+//   for (let element in elements) {
+//       console.log(element);
+//       // element.classList.remove('collapse');
+//       // element.classList.add('expand');
+//   }
+// }
+
+// function expandTable() {
+//   const elements = document.getElementsByClassName('expand');
+//   console.log(elements);  
+//   for (let element in elements) {
+//       console.log(element);
+//       // element.classList.remove('expand');
+//       // element.classList.add('collapse');
+//   }
+// }
 
 function populateIfcTable(table, ifcProject) {
     const initialDepth = 0;

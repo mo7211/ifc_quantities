@@ -45,6 +45,22 @@ section {
 margin-top: 3rem;
 }
 
+button{
+  margin: 0.25rem;
+  padding: .5rem;
+  background-color: white;
+  color: var(--dark-blue);
+
+  border-radius: 1rem;
+  border-color: var(--dark-blue);
+  border-width: 2px;
+}
+
+button:hover {
+  color: var(--light-blue);
+  cursor: pointer;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -130,3 +146,4 @@ tr:hover {
   width: 50%;
   height: 100%;
 }
+
