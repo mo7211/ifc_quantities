@@ -121442,6 +121442,14 @@ loadIfc('./IFC/01.ifc');
 window.ondblclick = () => viewer.IFC.selector.pickIfcItem();
 window.onmousemove = () => viewer.IFC.selector.prePickIfcItem();
 
+// window.ondblclick = async () => {
+//   const result = await viewer.IFC.selector.highlightIfcItem();
+//   if (!result) return;
+//   const { modelID, id } = result;
+//   const props = await viewer.IFC.getProperties(modelID, id, true, false);
+//   console.log(props);
+// };
+
 async function loadIfc(url) {
   await viewer.IFC.setWasmPath("../../../");
   const model = await viewer.IFC.loadIfcUrl(url);
@@ -121523,7 +121531,7 @@ function createLeafRow(table, node, depth) {
     dataId.textContent = node.expressID;
     row.appendChild(dataName);
     const price = document.createElement('td');
-    price.textContent = node.type;
+    price.textContent = 'Area';
     row.appendChild(dataId);
     row.appendChild(price);
 	table.appendChild(row);
