@@ -1,5 +1,6 @@
 
 import { IfcViewerAPI } from 'web-ifc-viewer';
+import { IfcProperties } from 'web-ifc-viewer/dist/components/ifc/ifc-properties';
 
 const container = document.getElementById('viewer-container');
 const viewer = new IfcViewerAPI({container});
@@ -18,25 +19,46 @@ async function init() {
     populateIfcTable(listRoot, ifcProject)
 	// generateTreeLogic();
     implementTreeLogic();
+   const properties = await viewer.IFC.IfcProperties.serializeAllProperties(model.modelID);
+    console.log(properties[0]);
 }
 
 function populateIfcTable(table, ifcProject) {
     const initialDepth = 0;
 
-    createNode(table, ifcProject.type, initialDepth, ifcProject.children);
+    createNode(table, ifcProject.id, ifcProject.type, initialDepth, ifcProject.children);
 }
 
 
-function createNode(table, text, depth, children) {
+function createNode(table, id, text, depth, children) {
 
 	if(children.length === 0) {
-		createLeafRow(table, text, depth);
+		createLeafRow(table, id, text, depth);
 	} else {
 		// If there are multiple categories, group them together
 		const grouped = groupCategories(children);
 		createBranchRow(table, text, depth, grouped);
 	}
 }
+
+// function getPropertyWithExpressId(modelID=0) {
+//   // Clearing if previous values present
+//   const prop = document.getElementById("properties");
+//   prop.innerHTML = "";
+//   table.innerHTML = "";
+
+//   // Getting the Element ID from User and parsing it to 
+//   const elementID = parseInt(document.getElementById("expressIDLabel").value);
+//   ..
+//   // Getting Element Data - Refer Below 
+//   ..
+
+//   // Appending Table to our Div
+//   prop.appendChild(table);
+// }
+
+
+
 
 function createBranchRow(table, text, depth, children) {
 
@@ -63,13 +85,13 @@ function createBranchRow(table, text, depth, children) {
 
     depth = depth+1;
 
-	children.forEach(child => createNode(table, child.type, depth, child.children ));
+	children.forEach(child => createNode(table, child.id, child.type, depth, child.children ));
 
 }
 
 
 
-function createLeafRow(table, text, depth) {
+function createLeafRow(table, id, text, depth) {
 	const row = document.createElement('tr');
     const className = 'level'+ depth;
     row.classList.add(className);
@@ -78,9 +100,12 @@ function createLeafRow(table, text, depth) {
 
     const dataName = document.createElement('td');
     dataName.textContent = text;
+    const dataId = document.createElement('td');
+    dataId.textContent = id;
+    row.appendChild(dataName);
     const price = document.createElement('td');
     price.textContent = text;
-    row.appendChild(dataName);
+    row.appendChild(dataId);
     row.appendChild(price);
 	table.appendChild(row);
 }
