@@ -121432,24 +121432,38 @@ class IfcViewerAPI {
 }
 
 const container = document.getElementById('viewer-container');
-const viewer = new IfcViewerAPI({container});
+const viewer = new IfcViewerAPI({container, backgroundColor: new Color(0xffffff)});
 viewer.axes.setAxes();
 viewer.grid.setGrid();
-viewer.IFC.setWasmPath("../../../");
 
-init();
+loadIfc('./IFC/01.ifc');
 
-async function init() {
-	const model = await viewer.IFC.loadIfcUrl('./IFC/01.ifc');
-	const ifcProject = await viewer.IFC.getSpatialStructure(model.modelID);
-	const listRoot = document.getElementById('boq');
-    // listRoot.setAttribute('data-depth',0)
-	// createNode(listRoot, listRoot, ifcProject.type, ifcProject.children);
-    populateIfcTable(listRoot, ifcProject);
-	// generateTreeLogic();
-    implementTreeLogic();
-   const properties = await viewer.IFC.IfcProperties.serializeAllProperties(model.modelID);
-    console.log(properties[0]);
+
+window.ondblclick = () => viewer.IFC.selector.pickIfcItem();
+window.onmousemove = () => viewer.IFC.selector.prePickIfcItem();
+
+async function loadIfc(url) {
+  await viewer.IFC.setWasmPath("../../../");
+  const model = await viewer.IFC.loadIfcUrl(url);
+  await viewer.shadowDropper.renderShadow(model.modelID);
+  viewer.context.renderer.postProduction.active = true;
+
+  const ifcProject = await viewer.IFC.getSpatialStructure(model.modelID);
+  createTreeTable(ifcProject);
+}
+
+function removeAllChildren(element) {
+  while (element.firstChild) {
+      element.removeChild(element.firstChild);
+  }
+}
+
+function createTreeTable(ifcProject) {
+	
+	const tableRoot = document.getElementById('boq');
+  removeAllChildren(tableRoot);
+  populateIfcTable(tableRoot, ifcProject);
+  implementTreeLogic();
 }
 
 function populateIfcTable(table, ifcProject) {
@@ -121469,25 +121483,6 @@ function createNode(table, id, text, depth, children) {
 		createBranchRow(table, text, depth, grouped);
 	}
 }
-
-// function getPropertyWithExpressId(modelID=0) {
-//   // Clearing if previous values present
-//   const prop = document.getElementById("properties");
-//   prop.innerHTML = "";
-//   table.innerHTML = "";
-
-//   // Getting the Element ID from User and parsing it to 
-//   const elementID = parseInt(document.getElementById("expressIDLabel").value);
-//   ..
-//   // Getting Element Data - Refer Below 
-//   ..
-
-//   // Appending Table to our Div
-//   prop.appendChild(table);
-// }
-
-
-
 
 function createBranchRow(table, text, depth, children) {
 
@@ -121520,7 +121515,7 @@ function createBranchRow(table, text, depth, children) {
 
 
 
-function createLeafRow(table, id, text, depth) {
+function createLeafRow(table, expressID, text, depth) {
 	const row = document.createElement('tr');
     const className = 'level'+ depth;
     row.classList.add(className);
@@ -121530,13 +121525,22 @@ function createLeafRow(table, id, text, depth) {
     const dataName = document.createElement('td');
     dataName.textContent = text;
     const dataId = document.createElement('td');
-    dataId.textContent = id;
+    dataId.textContent = expressID;
     row.appendChild(dataName);
     const price = document.createElement('td');
     price.textContent = text;
     row.appendChild(dataId);
     row.appendChild(price);
 	table.appendChild(row);
+
+  row.onmouseenter = () => {
+    viewer.IFC.selector.prepickIfcItemsByID(0, [expressID]);
+  };
+
+  row.onclick = async () => {
+    viewer.IFC.selector.pickIfcItemsByID(0, [expressID]);
+  };
+
 }
 
 function groupCategories(children) {

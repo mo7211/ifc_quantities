@@ -94,8 +94,11 @@ tr:hover {
 }
 
 #quantities {
-  width: 75%;
+  position: absolute;
+  overflow-y: scroll;
+  width: 50%;
   height: 100%;
+  
 }
 
 #boq {
@@ -107,4 +110,13 @@ tr:hover {
   width: 25%;
   height: 90vh;
   background-color: var(--dark-gray);
+}
+
+#viewer-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  outline: none;
+  width: 50%;
+  height: 100%;
 }
