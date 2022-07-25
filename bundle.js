@@ -121452,11 +121452,8 @@ async function loadIfc(url) {
   createTreeTable(ifcProject);
 }
 
-function removeAllChildren(element) {
-  while (element.firstChild) {
-      element.removeChild(element.firstChild);
-  }
-}
+
+
 
 function createTreeTable(ifcProject) {
 	
@@ -121468,23 +121465,22 @@ function createTreeTable(ifcProject) {
 
 function populateIfcTable(table, ifcProject) {
     const initialDepth = 0;
-
-    createNode(table, ifcProject.id, ifcProject.type, initialDepth, ifcProject.children);
+    createNode(table, ifcProject, initialDepth, ifcProject.children);
 }
 
 
-function createNode(table, id, text, depth, children) {
+function createNode(table, node, depth, children) {
 
 	if(children.length === 0) {
-		createLeafRow(table, id, text, depth);
+		createLeafRow(table, node, depth);
 	} else {
 		// If there are multiple categories, group them together
 		const grouped = groupCategories(children);
-		createBranchRow(table, text, depth, grouped);
+		createBranchRow(table, node, depth, grouped);
 	}
 }
 
-function createBranchRow(table, text, depth, children) {
+function createBranchRow(table, node, depth, children) {
 
     const row = document.createElement('tr');
     const className = 'level' + depth;
@@ -121499,23 +121495,22 @@ function createBranchRow(table, text, depth, children) {
     toggle.classList.add('toggle');
     toggle.classList.add('collapse');
 
-    
 
-    dataName.textContent = text;
+    dataName.textContent = node.type;
     dataName.insertBefore(toggle, dataName.firstChild);
 
     row.appendChild(dataName);
-	table.appendChild(row); 
+	  table.appendChild(row); 
 
     depth = depth+1;
 
-	children.forEach(child => createNode(table, child.id, child.type, depth, child.children ));
+	children.forEach(child => createNode(table, child, depth, child.children ));
 
 }
 
 
 
-function createLeafRow(table, expressID, text, depth) {
+function createLeafRow(table, node, depth) {
 	const row = document.createElement('tr');
     const className = 'level'+ depth;
     row.classList.add(className);
@@ -121523,22 +121518,22 @@ function createLeafRow(table, expressID, text, depth) {
     row.setAttribute('data-depth', depth);
 
     const dataName = document.createElement('td');
-    dataName.textContent = text;
+    dataName.textContent = node.type;
     const dataId = document.createElement('td');
-    dataId.textContent = expressID;
+    dataId.textContent = node.expressID;
     row.appendChild(dataName);
     const price = document.createElement('td');
-    price.textContent = text;
+    price.textContent = node.type;
     row.appendChild(dataId);
     row.appendChild(price);
 	table.appendChild(row);
 
   row.onmouseenter = () => {
-    viewer.IFC.selector.prepickIfcItemsByID(0, [expressID]);
+    viewer.IFC.selector.prepickIfcItemsByID(0, [node.expressID]);
   };
 
   row.onclick = async () => {
-    viewer.IFC.selector.pickIfcItemsByID(0, [expressID]);
+    viewer.IFC.selector.pickIfcItemsByID(0, [node.expressID]);
   };
 
 }
@@ -121616,3 +121611,9 @@ function implementTreeLogic() {
     }
     return siblings;
   };
+
+  function removeAllChildren(element) {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+  }
