@@ -33,6 +33,35 @@ async function loadIfc(url) {
   createTreeTable(ifcProject);
 }
 
+//Set up clipping planes
+const clipperButton = document.getElementById('clipperButton');
+
+let clippingPlanesActive = false;
+clipperButton.onclick = () => {
+  clippingPlanesActive = !clippingPlanesActive;
+   viewer.clipper.active = clippingPlanesActive;
+
+   if(clippingPlanesActive) {
+     clipperButton.classList.add('active');
+   } else {
+    clipperButton.classList.remove('active');
+   }
+}
+
+window.ondblclick = () => {
+  if(clippingPlanesActive) {
+    viewer.clipper.createPlane();
+  }
+}
+
+window.onkeydown = (event) => {
+  if(event.code = 'delete' && clippingPlanesActive){
+    viewer.clipper.deletePlane();
+  }
+}
+
+//functions
+
 function createTreeTable(ifcProject) {
 	
 	const tableRoot = document.getElementById('boq');
