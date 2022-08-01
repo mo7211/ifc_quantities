@@ -24,7 +24,7 @@ window.onmousemove = () => viewer.IFC.selector.prePickIfcItem();
 // };
 
 async function loadIfc(url) {
-  await viewer.IFC.setWasmPath("../../../");
+  // await viewer.IFC.setWasmPath("../../../");
   const model = await viewer.IFC.loadIfcUrl(url);
   await viewer.shadowDropper.renderShadow(model.modelID);
   viewer.context.renderer.postProduction.active = true;

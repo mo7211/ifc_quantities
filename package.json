@@ -6,8 +6,8 @@
   "dependencies": {
     "builtin-modules": "^3.3.0",
     "camera-controls": "^1.34.7",
-    "deepmerge": "^4.2.2",
     "dat.gui": "^0.7.9",
+    "deepmerge": "^4.2.2",
     "estree-walker": "^1.0.1",
     "function-bind": "^1.1.1",
     "gsap": "^3.10.4",
@@ -19,14 +19,16 @@
     "picomatch": "^2.3.1",
     "resolve": "^1.22.1",
     "supports-preserve-symlinks-flag": "^1.0.0",
-    "rollup": "^2.75.7",
     "three": "^0.135.0",
     "three-mesh-bvh": "^0.5.14",
+    "web-ifc": "^0.0.35",
     "web-ifc-three": "^0.0.118",
-    "web-ifc-viewer": "^1.0.207",
-    "web-ifc": "^0.0.35"
+    "web-ifc-viewer": "^1.0.207"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "rollup": "^2.77.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup -c",
