@@ -138,11 +138,31 @@ tr:hover {
 }
 
 .toolbar {
-  position:fixed;
+  position:absolute;
   right: 0;
 
 }
 
+.ifc-property-menu {
+  border: 1px solid gray;
+  width: 20rem;
+  position: relative;
+  background-color: white;
+  left: 0;
+}
+
+.ifc-property-item {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 0.5rem;
+  border-bottom: solid 1px gray;
+}
+
+.ifc-property-value {
+  width: 100%;
+  text-align: right;
+}
 
 #quantities {
   position: absolute;

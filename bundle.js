@@ -121458,10 +121458,6 @@ viewer.grid.setGrid();
 
 loadIfc('01.ifc');
 
-
-window.ondblclick = () => viewer.IFC.selector.pickIfcItem();
-window.onmousemove = () => viewer.IFC.selector.prePickIfcItem();
-
 async function loadIfc(url) {
   // await viewer.IFC.setWasmPath("");
   const model = await viewer.IFC.loadIfcUrl(url);
@@ -121487,9 +121483,19 @@ clipperButton.onclick = () => {
    }
 };
 
-window.ondblclick = () => {
+window.onmousemove = () => viewer.IFC.selector.prePickIfcItem();
+
+window.ondblclick = async () => {
   if(clippingPlanesActive) {
     viewer.clipper.createPlane();
+  } else if(propertiesActive) {
+    const result = await viewer.IFC.selector.highlightIfcItem();
+    if (!result) return;
+    const { modelID, id } = result;
+    const props = await viewer.IFC.getProperties(modelID, id, true, false);
+    createPropertiesMenu(props);
+  } else {
+    viewer.IFC.selector.pickIfcItem();
   }
 };
 
@@ -121498,6 +121504,64 @@ window.onkeydown = (event) => {
     viewer.clipper.deletePlane();
   }
 };
+
+//properties
+
+// Properties menu
+const propertiesButton = document.getElementById('propertiesButton');
+const propertyMenu = document.getElementsByClassName('ifc-property-menu');
+
+console.log(propertyMenu);
+
+let propertiesActive = false;
+propertiesButton.onclick = () => {
+  propertiesActive = !propertiesActive;
+
+   if(propertiesActive) {
+    propertiesButton.classList.add('active');
+    propertyMenu.display = '';
+   } else {
+    propertiesButton.classList.remove('active');
+    propertyMenu.display = "none";
+   }
+};
+
+const propsGUI = document.getElementById("ifc-property-menu-root");
+
+function createPropertiesMenu(properties) {
+    console.log(properties);
+
+    removeAllChildren(propsGUI);
+
+    delete properties.psets;
+    delete properties.mats;
+    delete properties.type;
+
+
+    for (let key in properties) {
+        createPropertyEntry(key, properties[key]);
+    }
+
+}
+
+function createPropertyEntry(key, value) {
+    const propContainer = document.createElement("div");
+    propContainer.classList.add("ifc-property-item");
+
+    if(value === null || value === undefined) value = "undefined";
+    else if(value.value) value = value.value;
+
+    const keyElement = document.createElement("div");
+    keyElement.textContent = key;
+    propContainer.appendChild(keyElement);
+
+    const valueElement = document.createElement("div");
+    valueElement.classList.add("ifc-property-value");
+    valueElement.textContent = value;
+    propContainer.appendChild(valueElement);
+
+    propsGUI.appendChild(propContainer);
+}
 
 //functions
 
