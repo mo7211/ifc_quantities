@@ -7,14 +7,14 @@ const viewer = new IfcViewerAPI({container, backgroundColor: new Color(0xffffff)
 viewer.axes.setAxes();
 viewer.grid.setGrid();
 
-loadIfc('./IFC/01.ifc')
+loadIfc('01.ifc')
 
 
 window.ondblclick = () => viewer.IFC.selector.pickIfcItem();
 window.onmousemove = () => viewer.IFC.selector.prePickIfcItem();
 
 async function loadIfc(url) {
-  await viewer.IFC.setWasmPath("");
+  // await viewer.IFC.setWasmPath("");
   const model = await viewer.IFC.loadIfcUrl(url);
   await viewer.shadowDropper.renderShadow(model.modelID);
   viewer.context.renderer.postProduction.active = true;
