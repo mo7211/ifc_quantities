@@ -121509,9 +121509,7 @@ window.onkeydown = (event) => {
 
 // Properties menu
 const propertiesButton = document.getElementById('propertiesButton');
-const propertyMenu = document.getElementsByClassName('ifc-property-menu');
-
-console.log(propertyMenu);
+const propsGUI = document.getElementById("ifc-property-menu-root");
 
 let propertiesActive = false;
 propertiesButton.onclick = () => {
@@ -121519,14 +121517,12 @@ propertiesButton.onclick = () => {
 
    if(propertiesActive) {
     propertiesButton.classList.add('active');
-    propertyMenu.display = '';
+      propsGUI.style.display = '';
    } else {
     propertiesButton.classList.remove('active');
-    propertyMenu.display = "none";
+    propsGUI.style.display = "none";
    }
 };
-
-const propsGUI = document.getElementById("ifc-property-menu-root");
 
 function createPropertiesMenu(properties) {
     console.log(properties);

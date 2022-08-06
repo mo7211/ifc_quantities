@@ -14,7 +14,7 @@
 body {
   background-color: white;
   background-size: cover;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Fira Sans', Helvetica, sans-serif;
   color: var(--dark-gray);
 }
 
