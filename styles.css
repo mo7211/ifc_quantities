@@ -140,14 +140,13 @@ tr:hover {
 .toolbar {
   position:absolute;
   right: 0;
+  background-color: hsla(0, 0%, 100%, 0.5);
 
 }
 
 .ifc-property-menu {
-  border: 1px solid gray;
   width: 20rem;
   position: relative;
-  background-color: white;
   left: 0;
 }
 
@@ -156,7 +155,6 @@ tr:hover {
   flex-direction: row;
   width: 100%;
   padding: 0.5rem;
-  border-bottom: solid 1px gray;
 }
 
 .ifc-property-value {
